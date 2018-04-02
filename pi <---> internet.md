@@ -71,11 +71,11 @@ here is a [useful blog post](https://blog.dembowski.net/2013/namecheap-dynamic-d
    you should be prompted to answer some questions, but it doesn't matter cuz you'll be editing the configuration anyway.
 5. now edit the `/etc/ddclient.conf` on your pi to look something like
    ```shell
-   # /etc/ddclient.conf                                                                                                   
-
-   #############                                                                                                          
-   # namecheap #                                                                                                          
-   #############                                                                                                          
+   # /etc/ddclient.conf
+   
+   #############   
+   # namecheap #
+   #############   
    use=web, web=dynamicdns.park-your-domain.com/getip
    ssl=yes
    protocol=namecheap
