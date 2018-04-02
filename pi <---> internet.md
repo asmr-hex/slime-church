@@ -53,3 +53,45 @@ this step will be highly depenedent on what router you have. generally, you want
 
 # dynamic dns
 just like how, by default, a device connecting onto the local network is dynamically assigned an ip address by your router, your *router* is dynamically re-assigned an ip address by your internet service provider (ISP) quite frequently. if we want to be able to connect to our router from the outside world (via a domain name we own or something) without having to always re-lookup our router's exposed ip address, then we are going to have to stay up-to-date with what our router's ip address everytime it changes. *Dynamic DNS* (DDNS) to the rescue!
+### what is DDNS?
+its basically an approach for your local computer to broadcast changes to its router's public ip address to some external service which wants to keep up-to-date with your ip address. There are a couple ways of going about this,
+1. **your router has a DDNS client built into it**: your router detects when its public ip changes and then broadcasts this to a service which wants to know. the services that a router can broadcast to might be limited so, for example, if you have a domain registered with namecheap and your router doesn't broadcast to the namecheap ddns service, then you are out of luck.
+2. **use a ddns service**: there are free online ddns service providers which will give you a domain name which will not change and sync to a ddns client daemon you run on your computer (or if your router can broadcast to that ddns service you can use the ddns client built into your router instead of running one on your computer) which will sync the changing public ip address of your router to the domain name that the ddns service provider has given you. if you already have a domain name (from namecheap for example) this means that you are registering for another intermediate domain name which is annoying. so this solution is just one more extra service to deal with.
+3. **use a ddns client on your machine**: on linux there is a nice ddns client called [`ddclient`](https://github.com/ddclient/ddclient) which supports a bunch of ddns service providers including namecheap. since we can setup ddns with a domain name we've registered through namecheap, we will just use this.
+
+### `ddclient`
+here is a [useful blog post](https://blog.dembowski.net/2013/namecheap-dynamic-dns-setup-with-ddclient/) i read about setting up `ddclient` to work with namecheap ddns.
+1. log into namecheap, go to domain list -> advanced dns -> add new record `A + Dynamic DNS Record`
+2. set the `Host` to be `@` (the root domain (or `www` if you want this to point to `www.yourdomain.tld`)) and the `IP Address` to be some dummy address like `127.0.0.1` since our `ddclient` is going to overwrite this once it starts working.
+3. still on namecheap, there should be an option to enable ddns, which you should do and then it will give you a long Dynamic DNS Password.
+4. on your pi, install the `ddclient`
+   ```shell
+   $ sudo apt-get install ddclient
+   ```
+   you should be prompted to answer some questions, but it doesn't matter cuz you'll be editing the configuration anyway.
+5. now edit the `/etc/ddclient.conf` on your pi to look something like
+   ```shell
+   # /etc/ddclient.conf                                                                                                   
+
+   #############                                                                                                          
+   # namecheap #                                                                                                          
+   #############                                                                                                          
+   use=web, web=dynamicdns.park-your-domain.com/getip
+   ssl=yes
+   protocol=namecheap
+   server=dynamicdns.park-your-domain.com
+   login=slime.church
+   password='your namecheap ddns password'
+   @
+   ```
+   note that this will update the dns record without any port specification so it will default to port 80. this means that we can only have one server behind our router unfortunately. but to get around that, we could create a server which will use the `host` field of the http request to resolve requests to a network of ips within our local network. i haven't done this yet, but it is something i would like to do s.t. i can host a bunch of different servers from my LAN.
+6. remove the cache of the original config asked for by the prompt
+   ```shell
+   $ sudo rm /var/cache/ddclient/ddclient.cache
+   ```
+7. restart ddclient
+   ```shell
+   $ sudo ddclient
+   ```
+   
+ok. we should be good for now.
