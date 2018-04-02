@@ -4,6 +4,7 @@ i wanna let the internet talk to servers on my raspberry pi. How do i go about d
 according to some resources, here are the general steps:
 1. assign a static ip address to the pi on the local network
 2. update the configuration of your router to port forward inbound traffic to your pi
+3. setup ddns
 
 
 # assign static ip address to your pi
@@ -46,3 +47,9 @@ in the changes above, we are using the info we gathered previously and mapped
 
 ### reboot your pi
 # update router config to port forward inbound trafic to pi
+now we need to configure our router to port forward a port on the router's public ip to a port on our pi's static local network ip. to do this we need to login to our router's admin portal. go to your web browser and go to your router ip. In the previous step we found that the router (gateway) ip is `192.168.66.1`, so lets go there in our browser. You should be presented with the login screen for your router. Usually the username and password are both `admin` so you should probably change this to something more secure.
+
+this step will be highly depenedent on what router you have. generally, you want to find a way to configure port forwarding and then forward a port on the router's public ip to a port on your pi's static local ip address using all protocols.
+
+# dynamic dns
+just like how, by default, a device connecting onto the local network is dynamically assigned an ip address by your router, your *router* is dynamically re-assigned an ip address by your internet service provider (ISP) quite frequently. if we want to be able to connect to our router from the outside world (via a domain name we own or something) without having to always re-lookup our router's exposed ip address, then we are going to have to stay up-to-date with what our router's ip address everytime it changes. *Dynamic DNS* (DDNS) to the rescue!
