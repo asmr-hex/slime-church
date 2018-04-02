@@ -12,9 +12,9 @@ const (
 func main() {
 	http.HandleFunc("/", SayHi)
 	fmt.Println("listening on slime world")
-	http.ListenAndServe(IP+":6666", nil)
+	http.ListenAndServe(IP+":3141", nil)
 }
 
 func SayHi(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hii"))
+	w.Write([]byte("welcome to slime world"))
 }
