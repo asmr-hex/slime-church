@@ -93,5 +93,10 @@ here is a [useful blog post](https://blog.dembowski.net/2013/namecheap-dynamic-d
    ```shell
    $ sudo ddclient
    ```
+8. configure `ddclient` to run as a daemon, open `/etc/default/ddclient`
+   ```shell
+   run_daemon="true"
+   ```
+9. start the ddclient daemon, `sudo service ddclient start`
    
 ok. we should be good for now.
