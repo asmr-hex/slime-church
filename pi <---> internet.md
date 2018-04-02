@@ -99,4 +99,6 @@ here is a [useful blog post](https://blog.dembowski.net/2013/namecheap-dynamic-d
    ```
 9. start the ddclient daemon, `sudo service ddclient start`
    
+this is another [good blog post](https://samhobbs.co.uk/2015/01/dynamic-dns-ddclient-raspberry-pi-and-ubuntu) which says something at the end about dynamic dns providers timing out if there are no updates in a while, but i won't worry about that for now.
+
 ok. we should be good for now.
