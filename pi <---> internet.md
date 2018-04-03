@@ -114,16 +114,16 @@ $ sudo systemctl start nginx
 ### edit the nginx configuration
 edit the `/etc/nginx/conf.d/default.conf`,
 ```shell
-## Basic reverse proxy server ##                                                                                       
+## Basic reverse proxy server ##
 
 server_names_hash_bucket_size 100;
 
-## someservice service on slime.church ##                                                                            
+## someservice service on slime.church ##
 upstream someservice  {
       server 127.0.0.1:3141; #someservice                                                                            
 }
 
-## Start slime.church static landing page ##                                                                                               
+## Start slime.church static landing page ##
 server {
     listen       80;
     server_name  slime.church;
@@ -133,9 +133,9 @@ server {
     root   /home/pi/Public;
     index  index.html index.htm;
 }
-## End slime.church ##                                                                                                 
+## End slime.church ##
 
-## START someservice.slime.church ##                                                                                 
+## START someservice.slime.church ##
 server {
        listen      80;
        server_name someservice.slime.church;
