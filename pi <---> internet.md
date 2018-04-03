@@ -120,7 +120,7 @@ server_names_hash_bucket_size 100;
 
 ## someservice service on slime.church ##
 upstream someservice  {
-      server 127.0.0.1:3141; #someservice                                                                            
+      server 127.0.0.1:3141; #someservice
 }
 
 ## Start slime.church static landing page ##
