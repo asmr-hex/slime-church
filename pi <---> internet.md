@@ -7,6 +7,7 @@ according to some resources, here are the general steps:
 3. setup ddns
 4. setup nginx as reverse proxy to support multiple servers
 5. setup SSL with Let's Encrypt
+6. (TODO) when we have multiple machines accepting ssh connections behind the proxy, reverse ssh tunneling.
 
 *for most of these steps, i am assuming we are running at least raspbian stretch.*
 
