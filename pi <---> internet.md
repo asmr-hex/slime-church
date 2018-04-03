@@ -6,7 +6,9 @@ according to some resources, here are the general steps:
 2. update the configuration of your router to port forward inbound traffic to your pi
 3. setup ddns
 4. setup nginx as reverse proxy to support multiple servers
+5. setup SSL with Let's Encrypt
 
+*for most of these steps, i am assuming we are running at least raspbian stretch.*
 
 # assign static ip address to your pi
 the raspberry pi defaults to using a dynamic IP address assigned by the DHCP server (most likely your network router). we want to set it to be static instead.
@@ -154,5 +156,33 @@ server {
 }
 ```
 this configuration defines the directory for a static site to be served for `slime.church` and also a dynamic server to be proxied to for `someservice.slime.church`.
+
+# SSL with Let's Encrypt
+we don't want traffic to our sites to be cleartext so we need to get an SSL certificate to enable HTTPS. **Let's Encrypt** is a free Certificate Authority (CA), so let's use that.
+
+we will use `Certbot` to automate certificate issuance and installation.
+
+### install `Certbot`
+if you go to the [Certbot](https://certbot.eff.org/) site it will tell you how to install and use it,
+```shell
+$ sudo apt-get install python-certbot-nginx
+```
+
+### port forward router port 443 to pi port 443
+again, log into your router's web console and port forward.
+
+### obtain certificates and modifying nginx configuration to serve certs
+at the time of writing this, the way to obtain certificates is the following (this will handle obtaining certs and modifying the nginx configuration to serve them),
+```shell
+sudo certbot --authenticator standalone --installer nginx --pre-hook "systemctl stop nginx" --post-hook "systemctl start nginx"
+```
+this will stop and restart your nginx server while obtaining certs using the pre/post-hooks. you will be asked some questions which are easy to answer. certs will be save in `/etc/letsencrypt/live/slime.church/fullchain.pem`.
+
+### auto renew certificates
+since certs last for only 90 days, we want to continuously try to renew our certs if we can. `certbot` ships with a systemd service to easily handle auto-renew
+```shell
+$ sudo systemctl enable certbot.timer
+$ sudo systemctl start certbot.timer
+```
 
 ok. we should be good for now.
